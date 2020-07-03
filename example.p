@@ -47,3 +47,8 @@ var z = 10;
 
 if z >= 10: print "Hello World";
 else: print "Goodbye World";
+
+// Functions
+function myFunction(): print "My Function!";
+
+myFunction();

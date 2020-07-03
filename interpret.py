@@ -7,6 +7,7 @@ sys.setrecursionlimit(5000)
 # VARIABLE DECLARATIONS
 variables = []
 arrays = []
+functions = []
 filename = ""
 
 elseFlag = 0
@@ -39,6 +40,9 @@ def interpret(line, number):
                                 variables[i][1] = str(currentValue)
                     else:
                         variables[i][1] = value
+        for i in range(0, len(functions)):
+            if line.startswith(functions[i][0]):
+                interpret(functions[i][1], 0)
         if line.startswith("print"):
             new_line_contents = line.replace("print", "").strip()
             if new_line_contents.startswith("\""):
@@ -71,7 +75,11 @@ def interpret(line, number):
                 for i in range(0, len(variables)):
                     if final_line_contents in variables[i][0]:
                         print(variables[i][1].strip())
-                
+        if line.startswith("function"):
+            new_line_contents = line.replace("function", "").strip()
+            functionName = new_line_contents.split("()", 1)[0].strip()
+            code = new_line_contents.split("()", 1)[1].replace(":", "").strip()
+            functions.append([functionName, code])
         if line.startswith("var"):
             new_line_contents = line.replace("var", "").strip()
             variableName = new_line_contents.split("=", 1)[0]

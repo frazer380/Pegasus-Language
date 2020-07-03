@@ -1,4 +1,3 @@
-var x = 10;
+function myFunction(): print "Hello World";
 
-if x >= 10: print "Hello World";
-else: print "Goodbye World";
+myFunction();
