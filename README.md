@@ -18,3 +18,9 @@ print "Hello World!";
 print x;
 print arr:array[0];
 ```
+
+Input
+```
+var x = input();
+print x;
+```
