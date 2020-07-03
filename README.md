@@ -47,3 +47,10 @@ var x = 5;
 x = inc(x);
 print var:x;
 ```
+
+Functions
+```
+function myFunction(): print "Hello World";
+
+myFunction();
+```
