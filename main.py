@@ -15,6 +15,7 @@ def main():
     try:
         file = open(sys.argv[1])
         filename = sys.argv[1]
+        setFilename(filename)
         setup(file)
     except OSError:
         print("File does not exist or one isn't specified!")

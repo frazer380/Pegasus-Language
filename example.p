@@ -27,3 +27,10 @@ print arr:myArray[0];
 print arr:myArray[1];
 print arr:anotherArray[1];
 print arr:anotherArray[0];
+
+// If Else Statements
+var x = 5;
+var myArray = ["x is 5", "x is not 5"];
+
+if x == 5: print arr:myArray[0];
+else: print arr:myArray[1];
