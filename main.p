@@ -1,5 +1,5 @@
-print "What is your name?";
+var x = 5;
+var myArray = ["x is 5", "x is not 5"];
 
-var x = input();
-
-print x;
+if x == 5: print arr:myArray[0];
+else: print arr:myArray[1];
