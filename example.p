@@ -10,6 +10,14 @@ print "hello";
 print name;
 print x;
 
+// Input
+print "What is your name?";
+
+var y = input();
+
+print y;
+
+
 // Arrays
 var myArray = ["Hello", "World"];
 var anotherArray = ["Goodbye", "World"];

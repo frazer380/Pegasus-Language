@@ -1,2 +1,5 @@
-var y = 1;
-print y;
+print "What is your name?";
+
+var x = input();
+
+print x;
