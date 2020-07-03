@@ -1,3 +1,2 @@
-var boi = hello world
-// comment
-print var boi
+var y = 1;
+print y;
