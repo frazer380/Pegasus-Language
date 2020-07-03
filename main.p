@@ -1,5 +1,4 @@
-var x = 5;
-var myArray = ["x is 5", "x is not 5"];
+var x = 10;
 
-if x == 5: print arr:myArray[0];
-else: print arr:myArray[1];
+if x >= 10: print "Hello World";
+else: print "Goodbye World";

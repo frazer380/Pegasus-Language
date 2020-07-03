@@ -15,11 +15,30 @@ def setFilename(fileParam):
     global filename
     filename = fileParam
 
+def Math(input):
+    return eval(input)
+
 def interpret(line, number):
     global elseFlag
     if line.endswith(";") or line.endswith("{") or line.endswith("}"):
         if line.startswith("//"):
             pass
+        for i in range(0, len(variables)):
+            if line.startswith(variables[i][0]):
+                    value = line.replace(variables[i][0], "").replace("=",  "").replace(";", "").strip()
+                    if value.startswith("Math"):
+                        value = value.replace("Math(", "").replace(")", "")
+                        value = Math(value)
+                        variables[i][1] = str(value)
+                    elif value.startswith("inc"):
+                        value = value.replace("inc(", "").replace(")", "").strip()
+                        for i in range(0, len(variables)):
+                            if value in variables[i][0]:
+                                currentValue = variables[i][1]
+                                currentValue = int(currentValue) + 1
+                                variables[i][1] = str(currentValue)
+                    else:
+                        variables[i][1] = value
         if line.startswith("print"):
             new_line_contents = line.replace("print", "").strip()
             if new_line_contents.startswith("\""):
@@ -57,35 +76,109 @@ def interpret(line, number):
             new_line_contents = line.replace("var", "").strip()
             variableName = new_line_contents.split("=", 1)[0]
             value = new_line_contents.split("=", 1)[1]
-            if value.strip() == "input();":
+            if value.replace(";", "").strip() == "True" or value.replace(";", "").strip() == "False":
+                variables.append([variableName, value.replace(";", "").strip()])
+            elif value.strip() == "input();":
                 userInput = input()
                 variables.append([variableName, userInput])
+            elif value.split("(", 1)[0].strip():
+                mathInput = value.replace("Math(", "").replace(")", "").replace(";", "").strip()
+                output = Math(mathInput)
+                variables.append([variableName, str(output)])
             else:
                 if value.strip().startswith("["):
                     value = value[:-1].strip()
                     value = literal_eval(value)
                     value.insert(0, variableName)
                     arrays.append(value)
-                else:
+                if value.strip().startswith("\""):
                     value = value[:-1]
+                    value = value.replace("\"", "")
                     variables.append([variableName, value])
+                #else:
+                    #print(error(filename, number, line, "Incorrect variable declaration"))
         if line.startswith("if"):
             new_line_contents = line.replace("if", "")
-            variableName =  new_line_contents.split("==", 1)[0].strip()
-            new_line_contents = new_line_contents.replace(variableName, "").strip()
-            new_line_contents = new_line_contents.replace("==", "").strip()
-            value = new_line_contents.split(":", 1)[0]
-            varListLength = len(variables)
-            for i in range(varListLength):
-                var = variables[i]
-                var2 = "".join(str(e) for e in var)
-                if variableName in var2:
-                    var2 = var2.replace(variableName, "").split()
-                    if value == var2[0]:
-                        new_line_contents = line.split(":", 1)[1].strip()
-                        interpret(new_line_contents, 0)
-                    else:
-                        elseFlag = 1
+            if "==" in new_line_contents:
+                variableName =  new_line_contents.split("==", 1)[0].strip()
+                new_line_contents = new_line_contents.replace(variableName, "").strip()
+                new_line_contents = new_line_contents.replace("==", "").strip()
+                value = new_line_contents.split(":", 1)[0]
+                varListLength = len(variables)
+                for i in range(varListLength):
+                    var = variables[i]
+                    var2 = "".join(str(e) for e in var)
+                    if variableName in var2:
+                        var2 = var2.replace(variableName, "").split()
+                        if value == var2[0]:
+                            new_line_contents = line.split(":", 1)[1].strip()
+                            interpret(new_line_contents, 0)
+                        else:
+                            elseFlag = 1
+            elif ">=" in new_line_contents:
+                variableName =  new_line_contents.split(">=", 1)[0].strip()
+                new_line_contents = new_line_contents.replace(variableName, "").strip()
+                new_line_contents = new_line_contents.replace(">=", "").strip()
+                value = new_line_contents.split(":", 1)[0]
+                varListLength = len(variables)
+                for i in range(varListLength):
+                    var = variables[i]
+                    var2 = "".join(str(e) for e in var)
+                    if variableName in var2:
+                        var2 = var2.replace(variableName, "").split()
+                        if int(var2[0]) >= int(value):
+                            new_line_contents = line.split(":", 1)[1].strip()
+                            interpret(new_line_contents, 0)
+                        else:
+                            elseFlag = 1
+            elif "<=" in new_line_contents:
+                variableName =  new_line_contents.split("<=", 1)[0].strip()
+                new_line_contents = new_line_contents.replace(variableName, "").strip()
+                new_line_contents = new_line_contents.replace("<=", "").strip()
+                value = new_line_contents.split(":", 1)[0]
+                varListLength = len(variables)
+                for i in range(varListLength):
+                    var = variables[i]
+                    var2 = "".join(str(e) for e in var)
+                    if variableName in var2:
+                        var2 = var2.replace(variableName, "").split()
+                        if int(var2[0]) <= int(value):
+                            new_line_contents = line.split(":", 1)[1].strip()
+                            interpret(new_line_contents, 0)
+                        else:
+                            elseFlag = 1
+            elif ">" in new_line_contents:
+                variableName =  new_line_contents.split(">", 1)[0].strip()
+                new_line_contents = new_line_contents.replace(variableName, "").strip()
+                new_line_contents = new_line_contents.replace(">", "").strip()
+                value = new_line_contents.split(":", 1)[0]
+                varListLength = len(variables)
+                for i in range(varListLength):
+                    var = variables[i]
+                    var2 = "".join(str(e) for e in var)
+                    if variableName in var2:
+                        var2 = var2.replace(variableName, "").split()
+                        if int(var2[0]) > int(value):
+                            new_line_contents = line.split(":", 1)[1].strip()
+                            interpret(new_line_contents, 0)
+                        else:
+                            elseFlag = 1
+            elif "<" in new_line_contents:
+                variableName =  new_line_contents.split("<", 1)[0].strip()
+                new_line_contents = new_line_contents.replace(variableName, "").strip()
+                new_line_contents = new_line_contents.replace("<", "").strip()
+                value = new_line_contents.split(":", 1)[0]
+                varListLength = len(variables)
+                for i in range(varListLength):
+                    var = variables[i]
+                    var2 = "".join(str(e) for e in var)
+                    if variableName in var2:
+                        var2 = var2.replace(variableName, "").split()
+                        if int(var2[0]) < int(value):
+                            new_line_contents = line.split(":", 1)[1].strip()
+                            interpret(new_line_contents, 0)
+                        else:
+                            elseFlag = 1
         if line.startswith("else") and elseFlag == 1:
             new_line_contents =  line.split(":",  1)[1].strip()
             elseFlag = 0
