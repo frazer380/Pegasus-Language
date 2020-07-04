@@ -90,7 +90,8 @@ def interpret(line, number):
                 final_line_contents = new_line_contents.replace("var:", "")[:-1]
                 for i in range(0, len(variables)):
                     if final_line_contents in variables[i][0]:
-                        print(variables[i][1].strip())
+                        x = str(variables[i][1]).strip()
+                        print(x)
                     else:
                         error(filename, number, line, "Variable \"" + final_line_contents + "\" does not exist")
         if line.startswith("function"):
@@ -233,6 +234,13 @@ def interpret(line, number):
             range2 = new_line_contents.split(",", 1)[1].split(":", 1)[0].strip()
             code = new_line_contents.split(":", 1)[1].strip()
             for i in range(int(range1), int(range2)):
+                if len(variables) == 0:
+                    variables.append([variableName, i])
+                else:
+                    for j in range(0, len(variables)):
+                        if variableName in variables[j]:
+                            del variables[j]
+                            variables.append([variableName, i])
                 interpret(code, 0)
             
     elif line.endswith(";") != True:

@@ -52,3 +52,15 @@ else: print "Goodbye World";
 function myFunction(): print "My Function!";
 
 myFunction();
+
+// For Loops
+for j in range 0, 2: print "hello";
+
+// Imports
+import "second.p";
+
+// Function in secondFile.p
+myFunction()
+
+// Variable in secondFile.p
+print var:myVar;

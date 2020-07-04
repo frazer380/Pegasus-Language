@@ -1,5 +1,1 @@
-import "second.p";
-
-myFunction();
-
-print var:x;
+for x in range 0, 3: print var:x;

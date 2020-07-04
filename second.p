@@ -1,3 +1,3 @@
 function myFunction(): print "Hello";
 
-var x = 5;
+var myVar = 5;
