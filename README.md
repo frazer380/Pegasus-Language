@@ -58,6 +58,7 @@ myFunction();
 For Loops
 ```
 for x in range 0, 2: print "hello";
+for y in range 0, 3: print var:y;
 ```
 
 Imports
