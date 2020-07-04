@@ -54,3 +54,19 @@ function myFunction(): print "Hello World";
 
 myFunction();
 ```
+
+For Loops
+```
+for x in range 0, 2: print "hello";
+```
+
+Imports
+```
+import "secondFile.p";
+
+// Function in secondFile.p
+myFunction()
+
+// Variable in secondFile.p
+print var:x;
+```
