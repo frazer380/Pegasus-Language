@@ -1,3 +1,5 @@
-function myFunction(): print "Hello World";
+import "second.p";
 
 myFunction();
+
+print var:x;

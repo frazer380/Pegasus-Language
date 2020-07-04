@@ -13,10 +13,15 @@ def main():
     global file
     global filename
     try:
-        file = open(sys.argv[1])
-        filename = sys.argv[1]
-        setFilename(filename)
-        setup(file)
+        if sys.argv[1] == "console":
+            while True:
+                code = input()
+                interpret(code, 0)
+        else:
+            file = open(sys.argv[1])
+            filename = sys.argv[1]
+            setFilename(filename)
+            setup(file)
     except OSError:
         print("File does not exist or one isn't specified!")
 

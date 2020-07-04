@@ -1,7 +1,6 @@
 import sys
 from ast import literal_eval
 from error import *
-
 sys.setrecursionlimit(5000)
 
 # VARIABLE DECLARATIONS
@@ -18,6 +17,15 @@ def setFilename(fileParam):
 
 def Math(input):
     return eval(input)
+
+def import_file(fileToImport):
+    file = open(fileToImport)
+    read_lines = file.readlines()
+    read_lines_stripped = [line.strip("\n") for line in read_lines]
+    read_lines_enum = enumerate(read_lines_stripped)
+    for count, item in read_lines_enum:
+        if item.startswith("print") == False: 
+            interpret(item, count)
 
 def interpret(line, number):
     global elseFlag
@@ -42,7 +50,15 @@ def interpret(line, number):
                         variables[i][1] = value
         for i in range(0, len(functions)):
             if line.startswith(functions[i][0]):
+                if(functions[i][2]):
+                    for j in range(0, len(functions[i][2])):
+                        argumentValues = line.split("(", 1)[1].split(")", 1)[0].replace("\"", "").split(",")
+                        variableName = functions[i][2][j]
+                        variables.append([variableName, argumentValues[j]])  
                 interpret(functions[i][1], 0)
+        if line.startswith("import"):
+            fileToImport = line.replace("import", "").replace("\"", "").replace(";", "").strip()
+            import_file(fileToImport)
         if line.startswith("print"):
             new_line_contents = line.replace("print", "").strip()
             if new_line_contents.startswith("\""):
@@ -75,11 +91,14 @@ def interpret(line, number):
                 for i in range(0, len(variables)):
                     if final_line_contents in variables[i][0]:
                         print(variables[i][1].strip())
+                    else:
+                        error(filename, number, line, "Variable \"" + final_line_contents + "\" does not exist")
         if line.startswith("function"):
             new_line_contents = line.replace("function", "").strip()
-            functionName = new_line_contents.split("()", 1)[0].strip()
-            code = new_line_contents.split("()", 1)[1].replace(":", "").strip()
-            functions.append([functionName, code])
+            functionName = new_line_contents.split("(", 1)[0]
+            code =  new_line_contents.split(":", 1)[1].strip()
+            arguments = new_line_contents.split("(", 1)[1].split(")", 1)[0].split(",")
+            functions.append([functionName, code, arguments])
         if line.startswith("var"):
             new_line_contents = line.replace("var", "").strip()
             variableName = new_line_contents.split("=", 1)[0]
@@ -187,10 +206,35 @@ def interpret(line, number):
                             interpret(new_line_contents, 0)
                         else:
                             elseFlag = 1
+            elif "!=" in new_line_contents:
+                            variableName =  new_line_contents.split("!=", 1)[0].strip()
+                            new_line_contents = new_line_contents.replace(variableName, "").strip()
+                            new_line_contents = new_line_contents.replace("!=", "").strip()
+                            value = new_line_contents.split(":", 1)[0]
+                            varListLength = len(variables)
+                            for i in range(varListLength):
+                                var = variables[i]
+                                var2 = "".join(str(e) for e in var)
+                                if variableName in var2:
+                                    var2 = var2.replace(variableName, "").split()
+                                    if int(var2[0]) != int(value):
+                                        new_line_contents = line.split(":", 1)[1].strip()
+                                        interpret(new_line_contents, 0)
+                                    else:
+                                        elseFlag = 1
         if line.startswith("else") and elseFlag == 1:
             new_line_contents =  line.split(":",  1)[1].strip()
             elseFlag = 0
             interpret(new_line_contents, 0)
+        if line.startswith("for"):
+            new_line_contents = line.replace("for", "")
+            variableName = new_line_contents.split("in", 1)[0].strip()
+            range1 = new_line_contents.split("range", 1)[1].split(",", 1)[0].strip()
+            range2 = new_line_contents.split(",", 1)[1].split(":", 1)[0].strip()
+            code = new_line_contents.split(":", 1)[1].strip()
+            for i in range(int(range1), int(range2)):
+                interpret(code, 0)
+            
     elif line.endswith(";") != True:
         if line.startswith("//") != True:
             if line.strip():
